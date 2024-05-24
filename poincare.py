@@ -41,13 +41,13 @@ def plot_confidence_ellipse(ax, data, conf_level=0.95, edge_color='red'):
 signal_length = 20000
 
 # 获取并处理不规则异常心跳数据
-record_arrhythmia = wfdb.rdrecord('101', pn_dir='mitdb', sampto=signal_length, channels=[0])
+record_arrhythmia = wfdb.rdrecord('datas/mitdb/101', sampto=signal_length, channels=[0])
 arrhythmia_data = record_arrhythmia.p_signal
 arrhythmia_peaks = ampd(arrhythmia_data.squeeze())
 arrhythmia_intervals = np.column_stack((np.diff(arrhythmia_peaks[:-1]), np.diff(arrhythmia_peaks[1:])))
 
 # 获取并处理正常心跳数据
-record_normal = wfdb.rdrecord('16272', pn_dir='nsrdb', sampto=signal_length, channels=[0])
+record_normal = wfdb.rdrecord('datas/nsrdb/16272', sampto=signal_length, channels=[0])
 normal_data = record_normal.p_signal
 normal_peaks = ampd(normal_data.squeeze())
 normal_intervals = np.column_stack((np.diff(normal_peaks[:-1]), np.diff(normal_peaks[1:])))
