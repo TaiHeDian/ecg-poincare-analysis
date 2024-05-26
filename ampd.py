@@ -2,40 +2,41 @@ import numpy as np
 
 def ampd(data):
     """
-    AMPD算法
-    :param data: 1-D numpy.ndarray
-    :return: 波峰所在索引值的列表
+    Automatic multiscale-based peak detection Algorithm.
+
+    Parameters
+    ----------
+    data : numpy.ndarray
+        1-dimensional vector containing input data. 
+
+    Returns
+    -------
+    numpy.ndarray
+        List of index values where the peaks are located.
     """
-    count = data.shape[0]
-    lmax = count // 2
-    # 创建一个二维数组，其中包含所有局部最大的检查
-    L = np.zeros((lmax, count), dtype=bool)
+    n = data.shape[0]
+    # Create a 2D array to contain all local maxima checks
+    peak_indicator = np.zeros((n // 2, n), dtype=bool)
 
-    for k in range(1, lmax + 1):
-        L[k - 1, k:-k] = (data[k:-k] > data[:-2 * k]) & (data[k:-k] > data[2 * k:])
+    for scale in range(1, n // 2 + 1):
+        peak_indicator[scale - 1, scale:-scale] = (
+            (data[scale:-scale] > data[:-2 * scale]) &
+            (data[scale:-scale] > data[2 * scale:])
+        )
 
-    # 计算每一行中False的数量（不是局部最大值）
-    G = np.sum(~L, axis=1)
-    
-    # 找到G中最小值的索引
-    l = np.argmin(G)
+    best_scale = np.argmax(np.sum(peak_indicator, axis=1))
+    P = np.sum(peak_indicator[:best_scale, :], axis=0) == best_scale
 
-    # 生成从1到l的所有整数的数组
-    K = np.arange(1, l + 1)
-    # 为每个i计算符合条件的K的数量
-    P = np.sum(L[:l, :], axis=0) == l
-
-    # 返回P为True的索引，即为峰值
     return np.where(P)[0]
 
-# 示例调用
 if __name__ == "__main__":
+    import wfdb
     import matplotlib.pyplot as plt
-    from sample_data import sample_data
     
-    y = sample_data()
-    plt.figure(figsize=(10, 5))
-    plt.plot(range(len(y)), y)
-    px = ampd(y)
-    plt.scatter(px, y[px], color="red")
+    data = wfdb.rdrecord('datas/nsrdb/16272', sampfrom=500, sampto=1500, physical=False, channels=[0]).d_signal
+    plt.figure(figsize=(16, 2))
+    plt.plot(range(len(data)), data, c="red")
+    px = ampd(data.squeeze())
+    plt.scatter(px, data[px], c="blue", marker='x')
+    plt.grid()
     plt.show()
