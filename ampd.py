@@ -33,7 +33,8 @@ if __name__ == "__main__":
     import wfdb
     import matplotlib.pyplot as plt
     
-    data = wfdb.rdrecord('datas/nsrdb/16272', sampfrom=500, sampto=1500, physical=False, channels=[0]).d_signal
+    data = wfdb.rdrecord('datas/nsrdb/16272', sampfrom=500, sampto=1500,
+                        physical=False, channels=[0]).d_signal
     plt.figure(figsize=(16, 2))
     plt.plot(range(len(data)), data, c="red")
     px = ampd(data.squeeze())
