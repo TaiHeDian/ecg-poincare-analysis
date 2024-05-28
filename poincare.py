@@ -1,8 +1,8 @@
-import numpy as np
 import wfdb
+import numpy as np
+import scipy.stats as stats
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
-import scipy.stats as stats
 
 from ampd import ampd
 

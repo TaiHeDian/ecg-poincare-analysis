@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def ampd(data):
     """
     Automatic multiscale-based peak detection Algorithm.
@@ -28,6 +29,7 @@ def ampd(data):
     P = np.sum(peak_indicator[:best_scale, :], axis=0) == best_scale
 
     return np.where(P)[0]
+
 
 if __name__ == "__main__":
     import wfdb
