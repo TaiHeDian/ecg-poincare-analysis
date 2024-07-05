@@ -1,3 +1,6 @@
+# TODO 加注释，写明数据来源与描述
+#      mghdb: https://archive.physionet.org/physiobank/database/mghdb/
+
 import wfdb
 import numpy as np
 import scipy.stats as stats
@@ -6,6 +9,8 @@ from matplotlib.patches import Ellipse
 
 from ampd import ampd
 
+
+# TODO  更改为OOP写法
 
 def plot_confidence_ellipse(ax, data, conf_level=0.95, edge_color='red'):
     # 计算数据的均值和协方差矩阵
