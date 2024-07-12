@@ -1,13 +1,12 @@
-# ECG 信号绘制 Poincaré 散点图
+# 颈静脉压力信号处理
 
-## ampd.py
+通过R-R间期和心率变异性（HRV）来分析颈静脉压力数据。
 
-自动多尺度峰值查找算法（启发自[文章](https://zhuanlan.zhihu.com/p/549588865)）
+## 数据来源
 
-![寻峰示意图](imgs/ampd-example.png)
+- 心衰ECG数据: https://www.physionet.org/content/mitdb/
+- 正常ECG数据：https://www.physionet.org/content/nsrdb/
 
-## poincare.py
+## TODO
 
-**主函数**：ECG数据读写与庞加莱散点图绘制
-
-![庞加莱散点图绘制](imgs/poincare-example.png)
+中心静脉压分析，根据[MGH/MF数据库](https://archive.physionet.org/physiobank/database/mghdb/)
