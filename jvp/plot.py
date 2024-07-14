@@ -4,7 +4,20 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 
-from readdata import read_data
+from load import read_data
+from peaks import find_peaks
+
+
+def generate_filename():
+    # 获取当前日期和时间
+    current_time = datetime.now()
+    formatted_time = current_time.strftime('%Y-%m-%d_%H-%M-%S')  # 格式化日期时间字符串
+
+    # 创建文件名和保存路径
+    folder_path = '../out/'
+    filename = f"Plot_{formatted_time}.png"
+
+    return os.path.join(folder_path, filename)
 
 
 def plot_dict_data(data_dict, cols=3):
@@ -52,20 +65,37 @@ def plot_dict_data(data_dict, cols=3):
     # 自动调整子图间距
     plt.tight_layout()
 
-    # 保存图片
-    # 获取当前日期和时间
-    current_time = datetime.now()
-    formatted_time = current_time.strftime('%Y-%m-%d_%H-%M-%S')  # 格式化日期时间字符串
+    plt.savefig(generate_filename())
+    plt.close()
 
-    # 创建文件名和保存路径
-    folder_path = '../out/'
-    filename = f"plot_{formatted_time}.png"
-    save_path = os.path.join(folder_path, filename)
 
-    # 检查文件夹是否存在，不存在则创建
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-    plt.savefig(save_path)
+def plot_single_data(data):
+    plt.figure(figsize=(20, 2))
+    plt.plot(data[:, 0], data[:, 1], c="red")
+    plt.xlabel('Time (sec)')  # 设置X轴标签
+    plt.ylabel('Current (A)')  # 设置Y轴标签
+    plt.xlim(left=0, right=data[:, 0].max())
+    plt.axhline(0, color='gray', linestyle=':', linewidth=1)
+
+    plt.tight_layout()
+
+    plt.savefig(generate_filename())
+    plt.close()
+
+
+def plot_peaks(data):
+    plt.figure(figsize=(16, 5))
+    plt.plot(data[:, 0], data[:, 1], c="red")
+    px = find_peaks(data[:, 1].squeeze())
+    plt.scatter(data[:, 0][px], data[:, 1][px], c="blue", marker='x')
+    plt.xlabel('Time (sec)')  # 设置X轴标签
+    plt.ylabel('Current (A)')  # 设置Y轴标签
+    plt.xlim(left=data[:, 0].min(), right=data[:, 0].max())
+    plt.axhline(0, color='gray', linestyle=':', linewidth=1)
+
+    plt.tight_layout()
+
+    plt.savefig(generate_filename())
     plt.close()
 
 

@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import wfdb
 
+from jvp.peaks import find_peaks
 from jvp.poincare import poincare_plot
-from jvp.process import find_peaks
 
 signal_length = 20000
 

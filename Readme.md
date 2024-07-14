@@ -9,4 +9,6 @@
 
 ## TODO
 
-中心静脉压分析，根据[MGH/MF数据库](https://archive.physionet.org/physiobank/database/mghdb/)
+- 完善Poincaré图绘制功能
+- 中心静脉压分析，根据[MGH/MF数据库](https://archive.physionet.org/physiobank/database/mghdb/)
+- 输出JVP分析后的特征值文本
