@@ -3,7 +3,7 @@ import scipy.stats as stats
 from matplotlib.patches import Ellipse
 
 
-def poincare_plot(ax, data, conf_level=0.95, edge_color='red'):
+def poincare(ax, data, conf_level=0.95, edge_color='red'):
     # 计算数据的均值和协方差矩阵
     mean = np.mean(data, axis=0)
     cov = np.cov(data, rowvar=False)
@@ -29,6 +29,6 @@ def poincare_plot(ax, data, conf_level=0.95, edge_color='red'):
     ax.scatter(mean[0], mean[1], c=edge_color, marker='x',
                label=f'({mean[0]:.2f}, {mean[1]:.2f})\n\nSD1={width:.2f}\nSD2={height:.2f}'
                )
-    ax.legend()
+    ax.legend(loc='lower right')
 
     return mean[0], mean[1], width, height

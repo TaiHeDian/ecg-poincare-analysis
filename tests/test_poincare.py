@@ -3,7 +3,7 @@ import numpy as np
 import wfdb
 
 from jvp.peaks import find_peaks
-from jvp.poincare import poincare_plot
+from jvp.poincare import poincare
 
 signal_length = 20000
 
@@ -26,7 +26,7 @@ ax2 = plt.subplot(1, 2, 2)
 
 # Plot for Arrhythmia Data
 ax1.scatter(arrhythmia_intervals[:, 0], arrhythmia_intervals[:, 1], edgecolors='blue', c='red')
-poincare_plot(ax1, arrhythmia_intervals, conf_level=0.9, edge_color='blue')
+poincare(ax1, arrhythmia_intervals, conf_level=0.9, edge_color='blue')
 ax1.set_title('Poincare Plot for Arrhythmia')
 ax1.set_xlabel('NN Interval [n]')
 ax1.set_ylabel('NN Interval [n+1]')
@@ -38,7 +38,7 @@ plt.figtext(0.07, 0.9, f"STD = {std_ratio_arrhythmia:.2f}", fontsize=12, color='
 
 # Plot for Normal Heartbeat Data
 ax2.scatter(normal_intervals[:, 0], normal_intervals[:, 1], edgecolors='red', c='blue')
-poincare_plot(ax2, normal_intervals, conf_level=0.9, edge_color='red')
+poincare(ax2, normal_intervals, conf_level=0.9, edge_color='red')
 ax2.set_title('Poincare Plot for Normal Heartbeat')
 ax2.set_xlabel('NN Interval [n]')
 ax2.set_ylabel('NN Interval [n+1]')

@@ -6,6 +6,8 @@ import numpy as np
 
 from load import read_data
 from peaks import find_peaks
+from poincare import poincare
+from process import filter_dict_data
 
 
 def generate_filename():
@@ -56,7 +58,7 @@ def plot_dict_data(data_dict, cols=3):
         ax.set_title(key)
         ax.set_xlabel('Time (sec)')
         ax.set_ylabel('Current (A)')
-        ax.set_xlim(left=0, right=value[:, 0].max())
+        ax.set_xlim(left=value[:, 0].min(), right=value[:, 0].max())
 
     # 隐藏多余的子图
     for ax in axs[n:]:
@@ -74,7 +76,7 @@ def plot_single_data(data):
     plt.plot(data[:, 0], data[:, 1], c="red")
     plt.xlabel('Time (sec)')  # 设置X轴标签
     plt.ylabel('Current (A)')  # 设置Y轴标签
-    plt.xlim(left=0, right=data[:, 0].max())
+    plt.xlim(left=data[:, 0].min(), right=data[:, 0].max())
     plt.axhline(0, color='gray', linestyle=':', linewidth=1)
 
     plt.tight_layout()
@@ -99,6 +101,37 @@ def plot_peaks(data):
     plt.close()
 
 
+def plot_dict_poincare(data_dict, cols=3):
+    n = len(data_dict)  # Number of datasets
+    rows = (n + cols - 1) // cols  # Calculate required number of rows
+
+    fig, axs = plt.subplots(rows, cols, figsize=(5 * cols, 5 * rows))  # Create subplot grid
+
+    if n == 1:
+        axs = np.array([axs])
+
+    axs = axs.flatten()
+
+    for ax, (key, data) in zip(axs, data_dict.items()):
+        peaks = find_peaks(data[:, 1])
+        intervals = np.column_stack((np.diff(peaks[:-1]), np.diff(peaks[1:])))
+        ax.set_title(key)
+        ax.scatter(intervals[:, 0], intervals[:, 1], edgecolors='red', c='blue')
+        poincare(ax, intervals, conf_level=0.9, edge_color='red')  # Call the existing poincare function
+        ax.set_xlabel('RRi')
+        ax.set_ylabel('RRi+1')
+        std_ratio = np.std(np.diff(intervals)) / np.sqrt(2)
+        ax.text(0.9, 0.9, f"STD = {std_ratio:.2f}",
+                color='blue', ha='right', va='top', transform=ax.transAxes)
+
+    # Hide any unused axes
+    for ax in axs[len(data_dict):]:
+        ax.set_visible(False)
+
+    plt.tight_layout()
+    plt.savefig(generate_filename())
+    plt.close()
+
+
 if __name__ == '__main__':
-    plot_dict_data(read_data('../data/jvp/commercial/'))
-    plt.show()
+    plot_dict_poincare(filter_dict_data(read_data('../data/jvp/commercial/')))
